@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="OneConnect — 簡單、快速、安全的跨平台 VPN 客戶端。">
+  <meta name="theme-color" content="#07111f">
+  <title>OneConnect｜安全連線，簡單完成</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07111f;
+      --panel: rgba(15, 32, 54, .76);
+      --line: rgba(139, 178, 225, .18);
+      --text: #f4f8ff;
+      --muted: #a8bad1;
+      --blue: #54a8ff;
+      --cyan: #62e4df;
+      --shadow: 0 28px 80px rgba(0, 0, 0, .38);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 82% 8%, rgba(40, 137, 255, .18), transparent 30rem),
+        radial-gradient(circle at 10% 48%, rgba(42, 213, 204, .10), transparent 28rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans TC", sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: auto; }
+    nav { height: 78px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: -.02em; }
+    .brand img { width: 38px; height: 38px; border-radius: 11px; object-fit: cover; }
+    .nav-link { color: var(--muted); font-size: 14px; }
+    .hero { min-height: 620px; display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 62px; padding: 56px 0 84px; }
+    .eyebrow { color: var(--cyan); font-size: 13px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 16px 0 22px; font-size: clamp(46px, 7vw, 80px); line-height: .98; letter-spacing: -.065em; }
+    .gradient { background: linear-gradient(105deg, #fff 20%, #75c1ff 60%, #67e5de); color: transparent; background-clip: text; }
+    .lead { max-width: 610px; color: var(--muted); font-size: clamp(17px, 2vw, 20px); line-height: 1.75; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+    .button { min-height: 54px; padding: 0 22px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; transition: .2s ease; }
+    .button:hover { transform: translateY(-2px); }
+    .button.primary { color: #04101e; background: linear-gradient(135deg, #6bb8ff, #66e2dc); box-shadow: 0 14px 34px rgba(80, 174, 255, .2); }
+    .button.secondary { border: 1px solid var(--line); background: rgba(255,255,255,.04); }
+    .release-note { margin-top: 15px; min-height: 20px; color: #8198b4; font-size: 13px; }
+    .visual { position: relative; min-height: 410px; display: grid; place-items: center; }
+    .orb { position: absolute; width: 360px; height: 360px; border-radius: 50%; background: linear-gradient(145deg, rgba(62,156,255,.30), rgba(69,232,214,.08)); filter: blur(1px); box-shadow: inset 0 0 70px rgba(111,197,255,.2), 0 0 90px rgba(46,142,255,.18); }
+    .device { position: relative; width: min(350px, 88vw); padding: 28px; border: 1px solid rgba(146,196,255,.26); border-radius: 28px; background: linear-gradient(155deg, rgba(20,42,70,.94), rgba(8,20,36,.92)); box-shadow: var(--shadow); backdrop-filter: blur(16px); }
+    .device-top { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 13px; }
+    .status-dot { width: 9px; height: 9px; border-radius: 50%; background: #60df9b; box-shadow: 0 0 14px #60df9b; }
+    .country { margin: 25px 0; padding: 15px 17px; border: 1px solid var(--line); border-radius: 14px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.03); }
+    .power { width: 148px; height: 148px; margin: 22px auto; border-radius: 50%; display: grid; place-items: center; color: white; font-size: 42px; background: linear-gradient(145deg, #207de2, #45c8d1); box-shadow: 0 0 0 12px rgba(73,168,238,.08), 0 18px 48px rgba(34,130,224,.36); }
+    .connected { text-align: center; font-weight: 800; }
+    .features { padding: 72px 0 96px; }
+    .section-title { max-width: 650px; margin-bottom: 32px; }
+    h2 { margin: 10px 0; font-size: clamp(32px, 4vw, 48px); letter-spacing: -.045em; }
+    .section-title p { color: var(--muted); line-height: 1.7; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { min-height: 210px; padding: 28px; border: 1px solid var(--line); border-radius: 22px; background: var(--panel); box-shadow: 0 16px 50px rgba(0,0,0,.14); }
+    .icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; color: var(--cyan); background: rgba(72,183,225,.12); font-size: 22px; }
+    .card h3 { margin: 24px 0 10px; font-size: 20px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.65; font-size: 14px; }
+    .notice { margin-bottom: 90px; padding: 24px 28px; border: 1px solid var(--line); border-radius: 18px; color: var(--muted); background: rgba(255,255,255,.025); line-height: 1.7; }
+    footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: #7188a3; font-size: 13px; display: flex; justify-content: space-between; gap: 20px; }
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 38px; }
+      .hero-copy { text-align: center; }
+      .lead { margin-inline: auto; }
+      .actions { justify-content: center; }
+      .visual { min-height: 390px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .wrap { width: min(100% - 28px, 1120px); }
+      nav { height: 68px; }
+      .nav-link { display: none; }
+      .button { width: 100%; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="#"><img src="assets/icon.png" alt="OneConnect"><span>OneConnect</span></a>
+      <a class="nav-link" href="https://github.com/1743986520/vpn/releases">所有版本</a>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Private · Fast · Reliable</div>
+          <h1>安全連線，<br><span class="gradient">簡單完成。</span></h1>
+          <p class="lead">OneConnect 為日常網路打造清爽、可靠的 VPN 體驗。選擇國家，一鍵連線，其餘交給我們。</p>
+          <div class="actions">
+            <a id="windows-download" class="button primary" href="https://github.com/1743986520/vpn/releases/latest">▣ 下載 Windows 版</a>
+            <a id="android-download" class="button secondary" href="https://github.com/1743986520/vpn/releases/latest">◆ 下載 Android 版</a>
+          </div>
+          <div id="release-note" class="release-note">正在取得最新版本…</div>
+        </div>
+        <div class="visual" aria-label="OneConnect 連線介面示意">
+          <div class="orb"></div>
+          <div class="device">
+            <div class="device-top"><span>OneConnect</span><span style="display:flex;align-items:center;gap:8px"><i class="status-dot"></i>安全</span></div>
+            <div class="country"><span>🌐&nbsp; 國家／地區</span><strong>自動（最佳節點）⌄</strong></div>
+            <div class="power">⌁</div>
+            <div class="connected">已連線</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="features">
+        <div class="section-title">
+          <div class="eyebrow">Built for everyday use</div>
+          <h2>需要的功能，剛剛好。</h2>
+          <p>從自動節點到指定國家，OneConnect 專注在快速、安全且容易理解的使用體驗。</p>
+        </div>
+        <div class="grid">
+          <article class="card"><div class="icon">◎</div><h3>智慧選擇節點</h3><p>自動評估延遲、負載與節點狀態，也可依需求指定國家或地區。</p></article>
+          <article class="card"><div class="icon">⚡</div><h3>快速穩定</h3><p>採用現代化連線核心，簡化設定流程，按一下即可建立安全通道。</p></article>
+          <article class="card"><div class="icon">↻</div><h3>自動檢查新版</h3><p>直接由官方 GitHub Releases 取得更新，下載前核對檔案大小與 SHA-256。</p></article>
+        </div>
+      </section>
+
+      <aside class="notice"><strong style="color:var(--text)">Windows 安裝提醒：</strong>目前安裝程式未使用商業程式碼簽章憑證，Windows SmartScreen 可能顯示提醒。請確認下載來源為本頁連結，再選擇「其他資訊 → 仍要執行」。</aside>
+    </main>
+
+    <footer><span>© 2026 OneConnect</span><span>Windows 10/11 · Android 5.0+</span></footer>
+  </div>
+
+  <script>
+    const api = 'https://api.github.com/repos/1743986520/vpn/releases/latest';
+    const note = document.getElementById('release-note');
+    const buttons = {
+      windows: document.getElementById('windows-download'),
+      android: document.getElementById('android-download')
+    };
+    const size = bytes => `${(bytes / 1048576).toFixed(1)} MB`;
+    fetch(api, { headers: { Accept: 'application/vnd.github+json' } })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then(release => {
+        for (const asset of release.assets || []) {
+          const name = asset.name.toLowerCase();
+          if (name.includes('windows') && name.endsWith('.exe')) {
+            buttons.windows.href = asset.browser_download_url;
+            buttons.windows.textContent = `▣ Windows ${size(asset.size)}`;
+          }
+          if (name.includes('android') && name.endsWith('.apk')) {
+            buttons.android.href = asset.browser_download_url;
+            buttons.android.textContent = `◆ Android ${size(asset.size)}`;
+          }
+        }
+        note.textContent = `最新版本 ${release.tag_name} · 由 GitHub Releases 安全下載`;
+      })
+      .catch(() => { note.textContent = '暫時無法取得版本資訊，請前往 GitHub Releases 下載。'; });
+  </script>
+</body>
+</html>
