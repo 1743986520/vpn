@@ -158,42 +158,47 @@
       language = value; document.documentElement.lang = value; languageSelect.value = value;
       document.querySelectorAll('[data-i18n]').forEach(node => { const value = translations[language][node.dataset.i18n]; if (typeof value === 'string') node.textContent = value; });
       localStorage.setItem('oneconnect-language', value);
-      if (latestRelease) renderRelease(latestRelease);
+      if (latestRelease) renderReleases(latestRelease);
     };
     languageSelect.addEventListener('change', event => applyLanguage(event.target.value));
     applyLanguage(language);
 
-    const api = 'https://api.github.com/repos/1743986520/vpn/releases/latest';
+    const api = 'https://api.github.com/repos/1743986520/vpn/releases?per_page=10';
     const note = document.getElementById('release-note');
     const buttons = {
       windows: document.getElementById('windows-download'),
       android: document.getElementById('android-download')
     };
     const size = bytes => `${(bytes / 1048576).toFixed(1)} MB`;
-    const renderRelease = release => {
+    const renderReleases = releases => {
       buttons.windows.textContent = translations[language].windowsDownload;
       buttons.android.textContent = translations[language].androidDownload;
-      for (const asset of release.assets || []) {
-        const name = asset.name.toLowerCase();
-        if (name.includes('windows') && name.endsWith('.exe')) {
-          buttons.windows.href = asset.browser_download_url;
-          buttons.windows.textContent = `${translations[language].windowsDownload} · ${size(asset.size)}`;
-        }
-        if (name.includes('android') && name.endsWith('.apk')) {
-          buttons.android.href = asset.browser_download_url;
-          buttons.android.textContent = `${translations[language].androidDownload} · ${size(asset.size)}`;
+      let hasWindows = false, hasAndroid = false;
+      for (const release of releases) {
+        for (const asset of release.assets || []) {
+          const name = asset.name.toLowerCase();
+          if (!hasWindows && name.includes('windows') && name.endsWith('.exe')) {
+            buttons.windows.href = asset.browser_download_url;
+            buttons.windows.textContent = `${translations[language].windowsDownload} · ${size(asset.size)}`;
+            hasWindows = true;
+          }
+          if (!hasAndroid && name.includes('android') && name.endsWith('.apk')) {
+            buttons.android.href = asset.browser_download_url;
+            buttons.android.textContent = `${translations[language].androidDownload} · ${size(asset.size)}`;
+            hasAndroid = true;
+          }
         }
       }
-      note.textContent = translations[language].latest(release.tag_name);
+      note.textContent = translations[language].latest(releases[0]?.tag_name || '');
     };
     fetch(api, { headers: { Accept: 'application/vnd.github+json' } })
       .then(response => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
       })
-      .then(release => {
-        latestRelease = release;
-        renderRelease(release);
+      .then(releases => {
+        latestRelease = releases;
+        renderReleases(releases);
       })
       .catch(() => { note.textContent = translations[language].failed; });
   </script>
